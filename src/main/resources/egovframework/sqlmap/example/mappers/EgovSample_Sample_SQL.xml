@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.sample.service.impl.SampleMapper">
+
+	<resultMap id="sample" type="egovframework.example.sample.service.SampleVO">
+		<result property="rownum" column="ROWNUM"/>
+		<result property="id" column="id"/>
+		<result property="useCode" column="useCode"/>
+		<result property="useDate" column="useDate"/>
+		<result property="money" column="money"/>
+		<result property="fileName" column="fileName"/>
+		<result property="fileOriName" column="fileOriName"/>
+		<result property="processCode" column="processCode"/>
+		<result property="pDate" column="pDate"/>
+		<result property="pMoney" column="pMoney"/>
+		<result property="contents" column="contents"/>
+		<result property="regDate" column="regDate"/>
+	</resultMap>
+
+	<insert id="insertSample" parameterType="SampleVO">
+
+			INSERT INTO list (
+				useCode, 
+				useDate, 
+				money, 
+				fileName,
+				regDate,
+				fileOriName,
+				fileUrl
+				) 
+				VALUES (
+				#{useCode}, 
+				#{useDate},
+				#{money}, 
+				#{fileName},
+				NOW(),
+				#{fileOriName},
+				#{fileUrl}
+				)
+	</insert>
+
+	<update id="updateSample">
+			UPDATE 
+				list
+			SET 
+				useCode=#{useCode},
+				useDate=#{useDate},
+				
+				<if test="fileName != null and fileName != ''">
+				fileName=#{fileName},
+				</if>
+				<if test="fileOriName != null and fileOriName != ''">
+				fileOriName=#{fileOriName},
+				</if>
+				money=#{money}
+			WHERE ID=#{id}
+	</update>
+	
+	<update id="updateApproved">
+			UPDATE list 
+			SET 
+			processCode = #{processCode}, 
+			pDate = now(), 
+			pMoney = #{pMoney}, 
+			contents = #{contents} 
+			WHERE 
+			Id=#{id}
+	</update>
+
+	<delete id="deleteSample">
+
+			DELETE FROM list
+			WHERE ID=#{id}
+
+	</delete>
+
+	<select id="selectSample" resultMap="sample">
+
+			<!-- SELECT
+				*
+			FROM list
+			WHERE ID=#{id} -->
+			
+			SELECT
+            id,
+            useDate, 
+            useCode, 
+            money,
+            pMoney,
+             <!-- FORMAT(money,0) AS money, 
+             FORMAT(pMoney,0) AS pMoney, -->
+            processCode,
+            SUBSTRING(regDate,1,10) AS regDate,
+            fileOriName,
+            fileName,
+            pDate,
+            contents
+            
+         FROM 
+            LIST A
+			
+		WHERE ID=#{id}
+
+	</select>
+
+	<select id="selectSampleList" parameterType="searchVO" resultType="sampleVO">
+			
+			SELECT @rownum := @rownum + 1 AS ROWNUM
+		         , T1.*
+		      FROM(
+			SELECT
+            A.id,
+            A.useDate, 
+            C.useContents AS useCode, 
+            A.money,
+            A.pMoney,
+             <!-- FORMAT(A.money,0) AS money, 
+             FORMAT(A.pMoney,0) AS pMoney, -->
+            B.process AS processCode,
+            SUBSTRING(A.regDate,1,10) AS regDate
+         FROM 
+            LIST A
+            
+         INNER JOIN 
+            processcode B 
+         ON 
+            A.processcode = B.pCode
+         INNER JOIN 
+            usecode C 
+         ON 
+            A.usecode = C.useCode
+            
+			WHERE 1=1
+			
+			
+			<if test="searchUseCode != null and searchUseCode != '' and searchUseCode != 'uc0' ">
+				AND	A.useCode LIKE '%' #{searchUseCode} '%'
+			</if>
+			<if test="searchProcessCode != null and searchProcessCode != '' and searchProcessCode != 'pc1' ">
+				AND	A.processCode LIKE '%' #{searchProcessCode} '%'
+			</if>
+			<if test="searchRegDate != null and searchRegDate !=''">
+				AND	A.regDate LIKE '%' #{searchRegDate} '%'
+			</if>
+			
+			) T1
+      		INNER JOIN (SELECT @rownum := 0) T2
+			ORDER BY ROWNUM DESC
+	</select>
+	
+	
+
+	<select id="selectSampleListTotCnt" parameterType="searchVO" resultType="int">
+
+			SELECT COUNT(*) totcnt
+			FROM 
+	            LIST A
+	         INNER JOIN 
+	            processcode B 
+	         ON 
+	            A.processcode = B.pCode
+	         INNER JOIN 
+	            usecode C 
+	         ON 
+	            A.usecode = C.useCode
+				
+				WHERE 1=1
+				
+				
+				<if test="searchUseCode != null and searchUseCode != '' and searchUseCode != 'uc0' ">
+					AND	A.useCode LIKE '%' #{searchUseCode} '%'
+				</if>
+				<if test="searchProcessCode != null and searchProcessCode != '' and searchProcessCode != 'pc1' ">
+					AND	A.processCode LIKE '%' #{searchProcessCode} '%'
+				</if>
+				<if test="searchRegDate != null and searchRegDate !=''">
+					AND	A.regDate LIKE '%' #{searchRegDate} '%'
+				</if>
+				
+	</select>
+	
+	<select id="excelDown" parameterType="searchVO" resultType="sampleVO">
+			SELECT @rownum := @rownum + 1 AS ROWNUM
+		         , T1.*
+		      FROM(
+			SELECT
+            A.id,
+            A.useDate, 
+            C.useContents AS useCode, 
+            A.money,
+            A.pMoney,
+             <!-- FORMAT(A.money,0) AS money, 
+             FORMAT(A.pMoney,0) AS pMoney, -->
+            B.process AS processCode,
+            SUBSTRING(A.regDate,1,10) AS regDate
+         FROM 
+            LIST A
+            
+         INNER JOIN 
+            processcode B 
+         ON 
+            A.processcode = B.pCode
+         INNER JOIN 
+            usecode C 
+         ON 
+            A.usecode = C.useCode
+            
+			WHERE 1=1
+			
+			
+			<if test="searchUseCode != null and searchUseCode != '' and searchUseCode != 'uc0' ">
+				AND	A.useCode LIKE '%' #{searchUseCode} '%'
+			</if>
+			<if test="searchProcessCode != null and searchProcessCode != '' and searchProcessCode != 'pc1' ">
+				AND	A.processCode LIKE '%' #{searchProcessCode} '%'
+			</if>
+			<if test="searchRegDate != null and searchRegDate !=''">
+				AND	A.regDate LIKE '%' #{searchRegDate} '%'
+			</if>
+			
+			) T1
+      		INNER JOIN (SELECT @rownum := 0) T2
+			ORDER BY ROWNUM DESC
+	</select>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+        <form name="sampleVO">
+        	<field property="useCode" depends="required">
+        		<arg0 key="title.sample.useCode" />
+			</field> 
+			<field property="useDate" depends="required">
+                <arg0 key="title.sample.useDate" />
+            </field>
+        	<field property="money" depends="required">
+        		<arg0 key="title.sample.money" />
+			</field>
+			<field property="fileName">
+        		<arg0 key="title.sample.fileName" />
+			</field>
+        </form>
+    </formset>
+
+</form-validation>

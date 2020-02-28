@@ -16,6 +16,7 @@
 package egovframework.example.sample.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import egovframework.example.sample.service.SampleDefaultVO;
 import egovframework.example.sample.service.SampleVO;
@@ -47,7 +48,7 @@ public interface SampleMapper {
 	 * @exception Exception
 	 */
 	void insertSample(SampleVO vo) throws Exception;
-
+	
 	/**
 	 * 글을 수정한다.
 	 * @param vo - 수정할 정보가 담긴 SampleVO
@@ -92,4 +93,7 @@ public interface SampleMapper {
 
 	List<SampleVO> excelDown(SampleDefaultVO searchVO);
 
+	void insertExcel(Map<String, Object> paramMap) throws Exception;
+
+	List<SampleVO> excelDown2(int id);
 }

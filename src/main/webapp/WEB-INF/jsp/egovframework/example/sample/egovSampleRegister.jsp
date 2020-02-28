@@ -68,10 +68,20 @@
         /* 승인 처리 function */
         function fn_egov_approved() {
         	frm = document.detailForm;
-        	document.detailForm.action = "<c:url value='/updateApproved.do'/>";
-           	document.detailForm.submit();
+        	if(!validateSampleVO(frm)){
+                return;
+        	}else{
+	        	frm.action = "<c:url value='/updateApproved.do'/>";
+	        	alert('승인하시겠습니까?');
+	        	frm.submit();
+        	}
         }
         
+        /* 엑셀 다운로드 */
+        function fn_egov_excelDown2(){
+        	document.detailForm.action = "<c:url value='/excelDown2.do'/>";
+        	document.detailForm.submit();
+        }
         //-->
         
          $(function() {
@@ -151,6 +161,12 @@ ${sampleVO}
                         <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
                     </span>
                 </li>
+	   	      	<li>
+	   	          <span class="btn_blue_l">
+	   	              <a href="javascript:fn_egov_excelDown2();"><spring:message code="button.excel" /></a>
+	                     <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
+	                 </span>
+	             </li>
     			<%-- <li>
                     <span class="btn_blue_l">
                         <a href="javascript:document.detailForm.reset();"><spring:message code="button.reset" /></a>
@@ -243,12 +259,11 @@ ${sampleVO}
       
       
       
-      
-      
+      <!-- **************처리내역******************** -->
       
       
       <c:if test="${registerFlag == 'modify'}">
-      <!-- 처리내역 -->
+      
       <div id="table">
     	<table width="100%" border="1" cellpadding="0" cellspacing="0" style="bordercolor:#D3E2EC; bordercolordark:#FFFFFF; BORDER-TOP:#C2D0DB 2px solid; BORDER-LEFT:#ffffff 1px solid; BORDER-RIGHT:#ffffff 1px solid; BORDER-BOTTOM:#C2D0DB 1px solid; border-collapse: collapse;">
     		<h1 style="color:black;"><spring:message code="title.sample.status" /></h1>
@@ -298,13 +313,14 @@ ${sampleVO}
     		<tr>
     			<td class="tbtd_caption"><label for="pMoney"><spring:message code="title.sample.pMoney" /></label></td>
     			<td class="tbtd_content">
-    				<form:input path="pMoney" maxlength="30" cssClass="txt" />
+    				<form:input path="pMoney" maxlength="30" cssClass="txt"/>
     				&nbsp;<form:errors path="pMoney" />
     			</td>
     			<%-- <td class="tbtd_content">
     				<form:textarea path="money" rows="5" cols="58" />&nbsp;<form:errors path="money" />
                 </td> --%>
     		</tr>
+    		
     		
     		<!-- 비고 -->
     		<tr>

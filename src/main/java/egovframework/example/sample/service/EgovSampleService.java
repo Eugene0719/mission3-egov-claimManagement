@@ -15,6 +15,7 @@
  */
 package egovframework.example.sample.service;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -86,6 +87,12 @@ public interface EgovSampleService {
 	int selectSampleListTotCnt(SampleDefaultVO searchVO);
 
 	List<SampleVO> excelDown(SampleDefaultVO searchVO);
+
+	void excelUpload(File destFile);
+
+	
+
+	List<SampleVO> excelDown2(int id);
 
 	
 

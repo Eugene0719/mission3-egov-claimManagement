@@ -19,6 +19,9 @@
 			<field property="fileName">
         		<arg0 key="title.sample.fileName" />
 			</field>
+			<!-- <field property="pMoney" depends="required">
+        		<arg0 key="title.sample.pMoney" />
+			</field> -->
         </form>
     </formset>
 

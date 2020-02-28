@@ -20,7 +20,7 @@
     
     <!-- Mysql (POM에서 commons-dbcp, mysql-connector-java 관련 라이브러리 설정 )  -->
     <bean destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource" id="dataSource">
-		<property value="com.mysql.jdbc.Driver" name="driverClassName"/>
+		<property value="com.mysql.cj.jdbc.Driver" name="driverClassName"/>
 		<property value="jdbc:mysql://127.0.0.1:3306/moneyt?serverTimezone=UTC" name="url"/>
 		<property value="root" name="username"/>
 		<property value="1111" name="password"/>

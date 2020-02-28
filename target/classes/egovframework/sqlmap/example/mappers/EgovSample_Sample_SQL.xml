@@ -16,6 +16,46 @@
 		<result property="contents" column="contents"/>
 		<result property="regDate" column="regDate"/>
 	</resultMap>
+	
+	<select id="excelDown2" resultMap="sample" parameterType="int">
+		SELECT
+	            A.id,
+	            A.useDate, 
+	            C.useContents AS useCode, 
+	            A.money,
+	            A.fileOriName,
+	            B.process AS processCode,
+	            A.pDate,
+	            A.contents
+        	FROM 
+            	LIST A
+            INNER JOIN
+            	processcode B
+            ON
+            	A.processcode = B.pCode
+            INNER JOIN
+            	usecode C
+            ON
+            	A.usecode = C.useCode
+			WHERE 
+				ID=#{id}
+	</select>
+	
+	<insert id="insertExcel" parameterType="sampleVO">
+		INSERT INTO list (
+				useCode, 
+				useDate, 
+				money
+				) 
+				VALUES 
+			<foreach collection="excelContent" item="item" separator=",">	
+				(
+				#{item.A}, 
+				#{item.B},
+				#{item.C}
+				)
+			</foreach>
+	</insert>
 
 	<insert id="insertSample" parameterType="SampleVO">
 
@@ -59,18 +99,20 @@
 	<update id="updateApproved">
 			UPDATE list 
 			SET 
-			processCode = #{processCode}, 
-			pDate = now(), 
-			pMoney = #{pMoney}, 
-			contents = #{contents} 
+				processCode = #{processCode}, 
+				pDate = now(), 
+				pMoney = #{pMoney}, 
+				contents = #{contents} 
 			WHERE 
-			Id=#{id}
+				Id=#{id}
 	</update>
 
 	<delete id="deleteSample">
 
-			DELETE FROM list
-			WHERE ID=#{id}
+			DELETE FROM 
+				list
+			WHERE 
+				ID=#{id}
 
 	</delete>
 
@@ -82,24 +124,25 @@
 			WHERE ID=#{id} -->
 			
 			SELECT
-            id,
-            useDate, 
-            useCode, 
-            money,
-            pMoney,
+	            id,
+	            useDate, 
+	            useCode, 
+	            money,
+	            pMoney,
              <!-- FORMAT(money,0) AS money, 
              FORMAT(pMoney,0) AS pMoney, -->
-            processCode,
-            SUBSTRING(regDate,1,10) AS regDate,
-            fileOriName,
-            fileName,
-            pDate,
-            contents
+	            processCode,
+	            SUBSTRING(regDate,1,10) AS regDate,
+	            fileOriName,
+	            fileName,
+	            pDate,
+	            contents
             
-         FROM 
-            LIST A
+        	FROM 
+            	LIST A
 			
-		WHERE ID=#{id}
+			WHERE 
+				ID=#{id}
 
 	</select>
 
